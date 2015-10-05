@@ -1,4 +1,9 @@
 #
+# Adopted from the book:
+# "Python cookbook", by David Ascher, Alex Martelli, Anna Ravenscroft
+#
+# Recipe 11.1. Showing a Progress Indicator on a Text Console
+# 
 
 import sys
 
