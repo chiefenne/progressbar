@@ -15,6 +15,16 @@ git clone https://github.com/yourusername/progressbar.git
 python progressbar.py
 ```
 
+This runs the code placed in the below section of the script:
+```
+if __name__ == "__main__":
+    total = 100
+    pb = ProgressBar(total)
+    for i in range(total + 1):
+        pb.progress(i)
+        time.sleep(0.1)
+```
+
 ## Using within another script
 You can also use the ProgressBar class from within another script or function:
 
