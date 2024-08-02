@@ -1,39 +1,47 @@
-#
-# Adopted from the book:
-# "Python cookbook", by David Ascher, Alex Martelli, Anna Ravenscroft
-#
-# Recipe 11.1. Showing a Progress Indicator on a Text Console
-# 
-
+# progressbar.py
 import sys
+import time
 
-class progressbar(object):
+class ProgressBar:
+    """
+    GUI-less ProgressBar
+    """
+    def __init__(self, final_count, block_char='.'):
+        self.final_count = final_count
+        self.block_count = 0
+        self.block_char = block_char
+        self.output = sys.stdout
 
-   """
-   GUI-less Progressbar
-   """
+        if not self.final_count:
+            return
+        
+        self.output.write('\n                   % Progress                     \n')
+        self.output.write('   10   20   30   40   50   60   70   80   90  100\n')
 
-   def __init__(self, finalcount, block_char='.'):
-       self.finalcount = finalcount
-       self.blockcount = 0
-       self.block = block_char
-       self.f = sys.stdout
-       if not self.finalcount: return
-       self.f.write('\n                   % Progress                     \n')
-       self.f.write('   10   20   30   40   50   60   70   80   90  100\n')
-   def progress(self, count):
-       count = min(count, self.finalcount)
-       if self.finalcount:
-           percentcomplete = int(round(100.0*count/self.finalcount))
-           if percentcomplete < 1: percentcomplete = 1
-       else:
-           percentcomplete=100
-       blockcount = int(percentcomplete//2)
-       if blockcount <= self.blockcount:
-           return
-       for i in range(self.blockcount, blockcount):
-           self.f.write(self.block)
-       self.f.flush( )
-       self.blockcount = blockcount
-       if percentcomplete == 100:
-           self.f.write("\n")
+    def progress(self, count):
+        count = min(count, self.final_count)
+        if self.final_count:
+            percent_complete = int(round(100.0 * count / self.final_count))
+            percent_complete = max(percent_complete, 1)
+        else:
+            percent_complete = 100
+        
+        block_count = percent_complete // 2
+        if block_count <= self.block_count:
+            return
+        
+        for _ in range(self.block_count, block_count):
+            self.output.write(self.block_char)
+        
+        self.output.flush()
+        self.block_count = block_count
+
+        if percent_complete == 100:
+            self.output.write("\n")
+
+if __name__ == "__main__":
+    total = 100
+    pb = ProgressBar(total)
+    for i in range(total + 1):
+        pb.progress(i)
+        time.sleep(0.1)
